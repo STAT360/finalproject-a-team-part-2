@@ -2,14 +2,8 @@
 
 Please write your initial proposal for your final project in this README document. What type of project is it? 
 
-- Package?
-    - data package
-    - analysis package
-- Shiny app? 
-- Something else?
+- Shiny app
 
-Where do you expect to find data? Do you need help finding data? What question will your project answer or purpose will it solve?
+We will use 2020 Presidential Primary Data from https://projects.fivethirtyeight.com/polls/ 
 
-
-
-Our goal is to make a data package that contains datasets regarding information on climate to make analysis of multiple different climate factors more accessible. We expect to find data online via Data.gov and kaggle.com, as well as other dataset websites. 
+Our goal is to predict who will get the Democratic Nomination in 2020. 
