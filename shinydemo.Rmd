@@ -1,0 +1,44 @@
+---
+title: "shiny1"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r}
+library(shiny)
+library(ggplot2)
+library(dplyr)
+```
+
+```{r}
+# Define UI for app that draws a histogram ----
+ui <- fluidPage(
+
+  # App title ----
+  titlePanel("Hello World!"),
+
+  # Sidebar layout with input and output definitions ----
+  sidebarLayout(
+
+    # Sidebar panel for inputs ----
+    sidebarPanel(
+
+    ),
+
+    # Main panel for displaying outputs ----
+    mainPanel(
+
+      # Output: Histogram ----
+      plotOutput(outputId = "distPlot")
+
+    )
+  )
+)
+runApp("App-1", display.mode = "showcase")
+```
