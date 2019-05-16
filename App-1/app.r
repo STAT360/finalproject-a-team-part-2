@@ -17,7 +17,7 @@ server <- function(input, output) {
     #change y value to percentage instead of count
     #ggplot(data = candidates)+geom_bar(mapping = aes(x = answer), fill = "blue")
     ggplot(data=candidates, aes(x=answer, y=pct)) +
-      geom_bar(stat="pct")
+      geom_bar(stat="identity")
   })
   
 }
