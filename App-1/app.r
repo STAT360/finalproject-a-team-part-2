@@ -4,7 +4,7 @@ library(plotly)
 candidates <- read.csv(file="president_primary_polls.csv", header=TRUE, sep=",")
 vec<-candidates%>%
   filter(party=="DEM")%>%
-  select(poll_id)%>%
+  select(question_id)%>%
   distinct()
 
 #if (interactive()) {
@@ -26,7 +26,8 @@ vec<-candidates%>%
     
     titlePanel("Democratic Primary Candidate Frontrunner Data"),
       mainPanel(plotOutput("distPlot"),
-                textOutput("selected_var")
+                textOutput("selected_var"),
+                textOutput("selected_var2")
                 )
       #add some user interaction
     
@@ -40,11 +41,17 @@ vec<-candidates%>%
         #candidates[candidates$poll_id == {input$PollId}, "pollster"][1]
       #})
     output$selected_var <- renderText({
-      paste("This poll comes from: ", candidates[candidates$poll_id == {input$var},"pollster"][1] )
+      paste("This poll comes from: ", candidates[candidates$question_id == {input$var},"pollster"][1] )
+      
+      
+    })
+    output$selected_var2 <- renderText({
+      
+      paste("Time of poll: ", candidates[candidates$question_id == {input$var},"start_date"][1] , "to",candidates[candidates$question_id == {input$var},"end_date"][1]  )
       
     })
     output$distPlot <- renderPlot({
-      candidates <- filter(candidates, poll_id == { input$var })
+      candidates <- filter(candidates, question_id == { input$var })
       #change y value to percentage instead of count
       #ggplot(data = candidates)+geom_bar(mapping = aes(x = answer), fill = "blue")
       ggplot(data=candidates, aes(x=answer, y=pct)) +
