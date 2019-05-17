@@ -56,7 +56,8 @@ vec<-candidates%>%
       #change y value to percentage instead of count
       #ggplot(data = candidates)+geom_bar(mapping = aes(x = answer), fill = "blue")
       ggplot(data=candidates, aes(x=answer, y=pct)) +
-        geom_bar(stat="identity",fill="blue")
+        geom_bar(stat="identity",fill="blue") +
+        theme(axis.text.x=element_text(angle=90, hjust=1))
     })
     
   }
