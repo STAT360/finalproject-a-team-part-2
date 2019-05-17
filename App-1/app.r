@@ -6,15 +6,24 @@ vec<-candidates%>%
   filter(party=="DEM")%>%
   select(question_id)%>%
   distinct()
+vec2<-candidates%>%
+  filter(party=="DEM")%>%
+  select(pollster)%>%
+  distinct()
 
 #if (interactive()) {
   ui <- fluidPage(
   
     #numericInput("PollId", "Poll Id:", 57975, min = 56000, max = 59000),
     #verbatimTextOutput("value"),
+    selectInput("pster",
+                label="Choose a pollster",
+                choices = vec2
+      
+    ),
     selectInput("var",
                 label="Choose a question ID: ",
-                choices = vec
+                choices = NULL
                 
                 
                 ),
@@ -32,10 +41,14 @@ vec<-candidates%>%
       #add some user interaction
     
   )
-  server <- function(input, output) {
+  server <- function(input, output,session) {
     #candidates <- read.csv(file="president_primary_polls.csv", header=TRUE, sep=",")
     #only include relevant candidates
     #candidates <- filter(candidates, pct > 5)
+    observeEvent(input$pster,{
+      updateSelectInput(session,'var',
+                        choices = candidates[candidates$pollster == {input$pster},"question_id"])
+    })
     candidates <- filter(candidates, party == "DEM")
     #output$value <- renderPrint({ 
         #candidates[candidates$poll_id == {input$PollId}, "pollster"][1]
