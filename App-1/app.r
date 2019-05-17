@@ -24,7 +24,7 @@ vec<-candidates%>%
     #),
     numericInput("percent",label="Choose the lowest percent to display: ",5, min = 0, max = 100),
     
-    titlePanel("Democratic Primary Candidate Frontrunner Data"),
+    titlePanel("Democratic Primary Candidate Data"),
       mainPanel(plotOutput("distPlot"),
                 textOutput("selected_var"),
                 textOutput("selected_var2")
@@ -57,7 +57,9 @@ vec<-candidates%>%
       #ggplot(data = candidates)+geom_bar(mapping = aes(x = answer), fill = "blue")
       ggplot(data=candidates, aes(x=answer, y=pct)) +
         geom_bar(stat="identity",fill="blue") +
-        theme(axis.text.x=element_text(angle=90, hjust=1))
+        theme(axis.text.x=element_text(angle=60, hjust=1)) +
+        xlab("Candidate Name") + 
+        ylab("Percent")
     })
     
   }
