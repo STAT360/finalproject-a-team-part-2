@@ -13,16 +13,16 @@ vec<-candidates%>%
     #numericInput("PollId", "Poll Id:", 57975, min = 56000, max = 59000),
     #verbatimTextOutput("value"),
     selectInput("var",
-                label="Choose a polling ID: ",
+                label="Choose a question ID: ",
                 choices = vec
                 
                 
                 ),
-    #selectInput("id",
-                #label="Choose a polling ID: ",
-                #choices = 
+    #sliderInput("Select the lowest percent you want to include: ",
+               # min = 0, max = 100,
       
     #),
+    numericInput("percent",label="Choose the lowest percent to display: ",5, min = 0, max = 100),
     
     titlePanel("Democratic Primary Candidate Frontrunner Data"),
       mainPanel(plotOutput("distPlot"),
@@ -35,7 +35,7 @@ vec<-candidates%>%
   server <- function(input, output) {
     #candidates <- read.csv(file="president_primary_polls.csv", header=TRUE, sep=",")
     #only include relevant candidates
-    candidates <- filter(candidates, pct > 5)
+    #candidates <- filter(candidates, pct > 5)
     candidates <- filter(candidates, party == "DEM")
     #output$value <- renderPrint({ 
         #candidates[candidates$poll_id == {input$PollId}, "pollster"][1]
@@ -52,6 +52,7 @@ vec<-candidates%>%
     })
     output$distPlot <- renderPlot({
       candidates <- filter(candidates, question_id == { input$var })
+      candidates <- filter(candidates, pct >= {input$percent})
       #change y value to percentage instead of count
       #ggplot(data = candidates)+geom_bar(mapping = aes(x = answer), fill = "blue")
       ggplot(data=candidates, aes(x=answer, y=pct)) +
