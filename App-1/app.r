@@ -3,6 +3,7 @@ library(dplyr)
 library(plotly)
 candidates <- read.csv(file="president_primary_polls.csv", header=TRUE, sep=",")
 vec<-candidates%>%
+  filter(party=="DEM")%>%
   select(poll_id)%>%
   distinct()
 
@@ -24,7 +25,9 @@ vec<-candidates%>%
     #),
     
     titlePanel("Democratic Primary Candidate Frontrunner Data"),
-      mainPanel(plotOutput("distPlot"))
+      mainPanel(plotOutput("distPlot"),
+                textOutput("selected_var")
+                )
       #add some user interaction
     
   )
@@ -36,6 +39,10 @@ vec<-candidates%>%
     #output$value <- renderPrint({ 
         #candidates[candidates$poll_id == {input$PollId}, "pollster"][1]
       #})
+    output$selected_var <- renderText({
+      paste("This poll comes from: ", candidates[candidates$poll_id == {input$var},"pollster"][1] )
+      
+    })
     output$distPlot <- renderPlot({
       candidates <- filter(candidates, poll_id == { input$var })
       #change y value to percentage instead of count
