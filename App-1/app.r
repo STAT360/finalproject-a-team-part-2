@@ -1,6 +1,7 @@
 library(shiny)
 library(dplyr)
 library(plotly)
+library(RColorBrewer)
 candidates <- read.csv(file="president_primary_polls.csv", header=TRUE, sep=",")
 vec<-candidates%>%
   filter(party=="DEM")%>%
@@ -27,10 +28,6 @@ vec2<-candidates%>%
                 
                 
                 ),
-    #sliderInput("Select the lowest percent you want to include: ",
-               # min = 0, max = 100,
-      
-    #),
     numericInput("percent",label="Choose the lowest percent to display: ",5, min = 0, max = 100),
     
     titlePanel("Democratic Primary Candidate Data"),
@@ -45,6 +42,7 @@ vec2<-candidates%>%
     #candidates <- read.csv(file="president_primary_polls.csv", header=TRUE, sep=",")
     #only include relevant candidates
     #candidates <- filter(candidates, pct > 5)
+    
     observeEvent(input$pster,{
       updateSelectInput(session,'var',
                         choices = candidates[candidates$pollster == {input$pster},"question_id"])
@@ -58,7 +56,6 @@ vec2<-candidates%>%
       paste("Time of poll: ", candidates[candidates$question_id == {input$var},"start_date"][1] , "to",candidates[candidates$question_id == {input$var},"end_date"][1]  )
       
     })
-    
     output$selected_var3 <- renderText({
       win<-candidates[candidates$question_id == {input$var},]
       win<-win[which.max(win$pct),]
@@ -69,11 +66,13 @@ vec2<-candidates%>%
       candidates <- filter(candidates, pct >= {input$percent})
       #change y value to percentage instead of count
       #ggplot(data = candidates)+geom_bar(mapping = aes(x = answer), fill = "blue")
-      ggplot(data=candidates, aes(x=answer, y=pct)) +
-        geom_bar(stat="identity",fill="blue") +
+      ggplot(data=candidates, aes(x=answer, y=pct, fill = pct)) +
+        geom_bar(stat="identity") +
         theme(axis.text.x=element_text(angle=60, hjust=1)) +
         xlab("Candidate Name") + 
-        ylab("Percent")
+        ylab("Percent") + 
+        scale_fill_gradient(low= "lightblue", high = "darkblue")
+        
     })
     
   }
