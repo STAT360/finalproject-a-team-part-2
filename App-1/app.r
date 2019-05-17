@@ -35,8 +35,8 @@ vec2<-candidates%>%
     
     titlePanel("Democratic Primary Candidate Data"),
       mainPanel(plotOutput("distPlot"),
-                textOutput("selected_var"),
-                textOutput("selected_var2")
+                textOutput("selected_var2"),
+                textOutput("selected_var3")
                 )
       #add some user interaction
     
@@ -53,15 +53,16 @@ vec2<-candidates%>%
     #output$value <- renderPrint({ 
         #candidates[candidates$poll_id == {input$PollId}, "pollster"][1]
       #})
-    output$selected_var <- renderText({
-      paste("This poll comes from: ", candidates[candidates$question_id == {input$var},"pollster"][1] )
-      
-      
-    })
     output$selected_var2 <- renderText({
       
       paste("Time of poll: ", candidates[candidates$question_id == {input$var},"start_date"][1] , "to",candidates[candidates$question_id == {input$var},"end_date"][1]  )
       
+    })
+    
+    output$selected_var3 <- renderText({
+      win<-candidates[candidates$question_id == {input$var},]
+      win<-win[which.max(win$pct),]
+      paste("Projected Winner based on this poll:", win$answer)
     })
     output$distPlot <- renderPlot({
       candidates <- filter(candidates, question_id == { input$var })
