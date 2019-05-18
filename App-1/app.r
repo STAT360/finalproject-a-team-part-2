@@ -17,11 +17,16 @@ vec2<-candidates%>%
   
     #numericInput("PollId", "Poll Id:", 57975, min = 56000, max = 59000),
     #verbatimTextOutput("value"),
+    checkboxGroupInput("method",
+                       "Choose the method of poll: ",
+                       choiceNames = c("Online", "Live Phone", "IVR/Online", "Online/IVR","Unspecified"),
+                       choiceValues = c("Online","Live Phone","IVR/Online","Online/IVR","")
+                       #choices = c("Online","Live Phone","IVR/Online","Online/IVR","")
+                       ),
     selectInput("pster",
                 label="Choose a pollster",
-                choices = vec2
-      
-    ),
+                choices = NULL
+                  ),
     selectInput("var",
                 label="Choose a question ID: ",
                 choices = NULL
@@ -43,6 +48,13 @@ vec2<-candidates%>%
     #only include relevant candidates
     #candidates <- filter(candidates, pct > 5)
     
+    observeEvent(input$method,{
+      updateSelectInput(session,'pster',
+                        choices = candidates[candidates$methodology %in% {input$method},"pollster"] 
+        
+      )
+      
+    })
     observeEvent(input$pster,{
       updateSelectInput(session,'var',
                         choices = candidates[candidates$pollster == {input$pster},"question_id"])
@@ -72,6 +84,7 @@ vec2<-candidates%>%
         xlab("Candidate Name") + 
         ylab("Percent") + 
         scale_fill_gradient(low= "lightblue", high = "darkblue")
+      
         
     })
     
