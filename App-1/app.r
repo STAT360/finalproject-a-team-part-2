@@ -4,14 +4,14 @@ library(plotly)
 library(RColorBrewer)
 library(base)
 candidates <- read.csv(file="president_primary_polls.csv", header=TRUE, sep=",")
-vec<-candidates%>%
-  filter(party=="DEM")%>%
-  select(question_id)%>%
-  distinct()
-vec2<-candidates%>%
-  filter(party=="DEM")%>%
-  select(pollster)%>%
-  distinct()
+#vec<-candidates%>%
+  #filter(party=="DEM")%>%
+  #select(question_id)%>%
+  #distinct()
+#vec2<-candidates%>%
+  #filter(party=="DEM")%>%
+  #select(pollster)%>%
+  #distinct()
 
 #if (interactive()) {
   ui <- fluidPage(
@@ -25,7 +25,7 @@ vec2<-candidates%>%
                        #choices = c("Online","Live Phone","IVR/Online","Online/IVR","")
                        ),
     selectInput("pster",
-                label="Choose a pollster",
+                label="Choose a pollster: ",
                 choices = NULL
                   ),
     selectInput("var",
@@ -36,13 +36,15 @@ vec2<-candidates%>%
                 ),
     numericInput("percent",label="Choose the lowest percent to display: ",5, min = 0, max = 100),
     
+    
     titlePanel("Democratic Primary Candidate Data"),
       mainPanel(plotOutput("distPlot"),
                 textOutput("selected_var2"),
-                textOutput("selected_var3")
-                )
-      #add some user interaction
-    
+                textOutput("selected_var3"),
+                uiOutput(outputId = "my_ui")
+                #add some user interaction
+  )
+ 
   )
   server <- function(input, output,session) {
     #candidates <- read.csv(file="president_primary_polls.csv", header=TRUE, sep=",")
@@ -85,6 +87,31 @@ vec2<-candidates%>%
         scale_fill_gradient(low= "lightblue", high = "darkblue")
       
         
+    })
+    output$my_ui<-renderUI({
+      win<-candidates[candidates$question_id == {input$var},]
+      win<-win[which.max(win$pct),]
+      if(isTRUE(win$answer == "Biden")){
+        img(src='Joe_Biden.jpg', height = '300px')
+      }
+      else if(isTRUE(win$answer == "Sanders")){
+        img(src='Bernie_Sanders.jpg', height = '300px')
+      }
+      else if(isTRUE(win$answer == "Warren")){
+        img(src = 'Elizabeth_Warren.jpeg', height = '300px')
+      }
+      else if(isTRUE(win$answer == "O'Rourke")){
+        img(src = 'Beto_ORourke.jpg', height = '300px')
+      }
+      else if(isTRUE(win$answer == "Harris")){
+        img(src = 'Kamala_Harris.jpg', height = '300px')
+      }
+      else if(isTRUE(win$answer == "Obama")){
+        img(src = 'Beto_ORourke.jpg', height = '300px')
+      }else{
+        img(src = 'Unknown_portrait.jpg', height = '300px')
+      }
+       
     })
     
   }
