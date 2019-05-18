@@ -2,6 +2,7 @@ library(shiny)
 library(dplyr)
 library(plotly)
 library(RColorBrewer)
+library(base)
 candidates <- read.csv(file="president_primary_polls.csv", header=TRUE, sep=",")
 vec<-candidates%>%
   filter(party=="DEM")%>%
@@ -47,17 +48,15 @@ vec2<-candidates%>%
     #candidates <- read.csv(file="president_primary_polls.csv", header=TRUE, sep=",")
     #only include relevant candidates
     #candidates <- filter(candidates, pct > 5)
-    
     observeEvent(input$method,{
       updateSelectInput(session,'pster',
                         choices = candidates[candidates$methodology %in% {input$method},"pollster"] 
-        
       )
-      
     })
     observeEvent(input$pster,{
       updateSelectInput(session,'var',
-                        choices = candidates[candidates$pollster == {input$pster},"question_id"])
+                        choices = candidates[candidates$methodology %in% {input$method} & candidates$pollster == {input$pster} ,"question_id"]
+                        )
     })
     candidates <- filter(candidates, party == "DEM")
     #output$value <- renderPrint({ 
