@@ -12,6 +12,13 @@ candidates <- read.csv(file="president_primary_polls.csv", header=TRUE, sep=",")
   #filter(party=="DEM")%>%
   #select(pollster)%>%
   #distinct()
+winners<-candidates%>%
+  filter(party=="DEM")%>%
+  group_by(question_id)%>%
+  filter(pct==max(pct))%>%
+  ungroup()%>%
+  select(answer)%>%
+  distinct()
 
 #if (interactive()) {
   ui <- fluidPage(
@@ -72,7 +79,7 @@ candidates <- read.csv(file="president_primary_polls.csv", header=TRUE, sep=",")
     output$selected_var3 <- renderText({
       win<-candidates[candidates$question_id == {input$var},]
       win<-win[which.max(win$pct),]
-      paste("Projected Winner based on this poll:", win$answer)
+      paste("Projected Winner based on this poll:", win$candidate_name)
     })
     output$distPlot <- renderPlot({
       candidates <- filter(candidates, question_id == { input$var })
